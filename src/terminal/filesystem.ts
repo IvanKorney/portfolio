@@ -42,7 +42,7 @@ const CONTACT_MD = `# Contacts
 
   email      ikorneyc@uwaterloo.ca
   linkedin   https://linkedin.com/in/ivan-korneychuk
-  github     https://github.com/IvanKorne
+  github     https://github.com/IvanKorney
   portfolio  https://ivan-korneychuk.vercel.app
 
 Quick commands:

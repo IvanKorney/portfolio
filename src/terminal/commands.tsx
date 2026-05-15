@@ -158,17 +158,41 @@ side projects like a real-time 1v1 coding platform.`,
   },
 };
 
-const whoamiCmd: Command = { ...aboutCmd, name: "whoami", summary: "alias for about" };
+const whoamiCmd: Command = {
+  ...aboutCmd,
+  name: "whoami",
+  summary: "alias for about",
+};
 
 const experienceCmd: Command = {
   name: "experience",
   summary: "work history",
   run: () => {
     const jobs = [
-      ["Backend Engineer", "Faire", "Jan 2026 – Apr 2026", "faire-backend-2026.md"],
-      ["Fullstack Engineer", "Faire", "May 2025 – Aug 2025", "faire-fullstack-2025.md"],
-      ["Fullstack Engineer", "Blaise Transit", "Sep 2024 – Dec 2024", "blaise-transit-2024.md"],
-      ["Software Engineer", "WE Accelerate", "Jan 2024 – Apr 2024", "we-accelerate-2024.md"],
+      [
+        "Backend Engineer",
+        "Faire",
+        "Jan 2026 – Apr 2026",
+        "faire-backend-2026.md",
+      ],
+      [
+        "Fullstack Engineer",
+        "Faire",
+        "May 2025 – Aug 2025",
+        "faire-fullstack-2025.md",
+      ],
+      [
+        "Fullstack Engineer",
+        "Blaise Transit",
+        "Sep 2024 – Dec 2024",
+        "blaise-transit-2024.md",
+      ],
+      [
+        "Software Engineer",
+        "WE Accelerate",
+        "Jan 2024 – Apr 2024",
+        "we-accelerate-2024.md",
+      ],
     ];
     const out: ReactNode[] = [];
     out.push(
@@ -229,7 +253,10 @@ const projectsCmd: Command = {
       );
       out.push(
         <div key={file + "b"}>
-          <Dim>{"  "}{blurb}</Dim>
+          <Dim>
+            {"  "}
+            {blurb}
+          </Dim>
         </div>,
       );
       out.push(
@@ -245,7 +272,9 @@ const projectsCmd: Command = {
       <div key="t">
         <Dim>
           More on GitHub —{" "}
-          <Link href="https://github.com/IvanKorne">github.com/IvanKorne</Link>
+          <Link href="https://github.com/IvanKorney">
+            github.com/IvanKorney
+          </Link>
         </Dim>
       </div>,
     );
@@ -256,7 +285,8 @@ const projectsCmd: Command = {
 const skillsCmd: Command = {
   name: "skills",
   summary: "tech stack",
-  run: () => pre(`Languages
+  run: () =>
+    pre(`Languages
   Python · JavaScript · TypeScript · Java · Kotlin · Go · SQL · HTML/CSS
 
 Frameworks & Libraries
@@ -291,20 +321,20 @@ const contactCmd: Command = {
   run: () => [
     <div key="e">
       {"  "}
-      <Accent>email     </Accent>{" "}
+      <Accent>email </Accent>{" "}
       <Link href="mailto:ikorneyc@uwaterloo.ca">ikorneyc@uwaterloo.ca</Link>
     </div>,
     <div key="l">
       {"  "}
-      <Accent>linkedin  </Accent>{" "}
+      <Accent>linkedin </Accent>{" "}
       <Link href="https://linkedin.com/in/ivan-korneychuk">
         linkedin.com/in/ivan-korneychuk
       </Link>
     </div>,
     <div key="g">
       {"  "}
-      <Accent>github    </Accent>{" "}
-      <Link href="https://github.com/IvanKorne">github.com/IvanKorne</Link>
+      <Accent>github </Accent>{" "}
+      <Link href="https://github.com/IvanKorney">github.com/IvanKorney</Link>
     </div>,
     <div key="s">
       {"  "}
@@ -350,14 +380,15 @@ const githubCmd: Command = {
     const out: ReactNode[] = [];
     out.push(
       <div key="o">
-        <Accent>github.com/IvanKorne</Accent>{" "}
-        <Dim>· fetching live stats…</Dim>
+        <Accent>github.com/IvanKorney</Accent> <Dim>· fetching live stats…</Dim>
       </div>,
     );
     try {
       const [userRes, reposRes] = await Promise.all([
-        fetch("https://api.github.com/users/IvanKorne"),
-        fetch("https://api.github.com/users/IvanKorne/repos?per_page=100&sort=updated"),
+        fetch("https://api.github.com/users/IvanKorney"),
+        fetch(
+          "https://api.github.com/users/IvanKorney/repos?per_page=100&sort=updated",
+        ),
       ]);
       if (!userRes.ok || !reposRes.ok) throw new Error("github api");
       const user = (await userRes.json()) as {
@@ -431,14 +462,16 @@ const githubCmd: Command = {
       out.push(
         <div key="err">
           <Dim>(couldn't reach the GitHub API right now — visit </Dim>
-          <Link href="https://github.com/IvanKorne">github.com/IvanKorne</Link>
+          <Link href="https://github.com/IvanKorney">
+            github.com/IvanKorney
+          </Link>
           <Dim> directly)</Dim>
         </div>,
       );
     }
     // also pop open in a new tab
     if (typeof window !== "undefined") {
-      window.open("https://github.com/IvanKorne", "_blank", "noopener");
+      window.open("https://github.com/IvanKorney", "_blank", "noopener");
     }
     return out;
   },
@@ -465,12 +498,18 @@ const lsCmd: Command = {
         return [<div key="f">{target}</div>];
       }
       return [
-        <Err key="e">ls: cannot access &apos;{target || "."}&apos;: no such file or directory</Err>,
+        <Err key="e">
+          ls: cannot access &apos;{target || "."}&apos;: no such file or
+          directory
+        </Err>,
       ];
     }
     const dirNode = lookup(path);
     return [
-      <div key="ls" style={{ display: "flex", flexWrap: "wrap", gap: "0 1.5em" }}>
+      <div
+        key="ls"
+        style={{ display: "flex", flexWrap: "wrap", gap: "0 1.5em" }}
+      >
         {items.map((name) => {
           const child =
             dirNode && dirNode.type === "dir" ? dirNode.children[name] : null;
@@ -617,8 +656,7 @@ const historyCmd: Command = {
   name: "history",
   summary: "show recent commands",
   run: (ctx) => {
-    if (ctx.history.length === 0)
-      return [<Dim key="d">(no history yet)</Dim>];
+    if (ctx.history.length === 0) return [<Dim key="d">(no history yet)</Dim>];
     return ctx.history.map((h, i) => (
       <div key={i}>
         <Dim>{String(i + 1).padStart(4)}</Dim> {h}
@@ -634,8 +672,8 @@ const openCmd: Command = {
     const target = (ctx.args[0] ?? "").toLowerCase();
     const map: Record<string, string> = {
       linkedin: "https://linkedin.com/in/ivan-korneychuk",
-      github: "https://github.com/IvanKorne",
-      gh: "https://github.com/IvanKorne",
+      github: "https://github.com/IvanKorney",
+      gh: "https://github.com/IvanKorney",
       email: "mailto:ikorneyc@uwaterloo.ca",
       mail: "mailto:ikorneyc@uwaterloo.ca",
       site: "https://ivan-korneychuk.vercel.app",
@@ -723,11 +761,10 @@ const sudoCmd: Command = {
   summary: "do something dangerous",
   hidden: true,
   run: () => [
-    <Err key="e">
-      [sudo] password for ivan: ********
-    </Err>,
+    <Err key="e">[sudo] password for ivan: ********</Err>,
     <div key="b">
-      <Dim>Sorry, user </Dim>visitor<Dim> is not in the sudoers file. This incident will be reported.</Dim>
+      <Dim>Sorry, user </Dim>visitor
+      <Dim> is not in the sudoers file. This incident will be reported.</Dim>
     </div>,
   ],
 };
@@ -749,7 +786,12 @@ function parseSplitDir(args: string[]): SplitDir {
   const flag = args[0]?.toLowerCase();
   // tmux convention: -h = horizontal divider = stacked, -v = vertical divider = side-by-side
   // I find that confusing — use words instead, but accept flags too.
-  if (flag === "right" || flag === "-h" || flag === "h" || flag === "horizontal")
+  if (
+    flag === "right" ||
+    flag === "-h" ||
+    flag === "h" ||
+    flag === "horizontal"
+  )
     return "horizontal";
   if (flag === "down" || flag === "-v" || flag === "v" || flag === "vertical")
     return "vertical";
