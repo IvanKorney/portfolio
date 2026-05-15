@@ -1,0 +1,133 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Theme variables ───────────────────────────────────────────── */
+:root,
+[data-theme="modern"] {
+  --bg-page: #0b0d12;
+  --bg-window: #11141b;
+  --bg-titlebar: #1a1f29;
+  --border: #262c38;
+  --text: #d5dbe6;
+  --text-dim: #8089a0;
+  --accent: #7dd3fc;     /* cyan */
+  --accent-2: #c4b5fd;   /* violet */
+  --prompt-user: #a5f3fc;
+  --prompt-host: #c4b5fd;
+  --prompt-path: #fcd34d;
+  --prompt-symbol: #94a3b8;
+  --error: #f87171;
+  --success: #86efac;
+  --link: #93c5fd;
+  --selection: rgba(125, 211, 252, 0.25);
+  --scanlines: 0;
+}
+
+[data-theme="green"] {
+  --bg-page: #040e04;
+  --bg-window: #081608;
+  --bg-titlebar: #0e220e;
+  --border: #1e3c1e;
+  --text: #8ec78e;
+  --text-dim: #4a7a4a;
+  --accent: #52c478;
+  --accent-2: #7dd9a0;
+  --prompt-user: #52c478;
+  --prompt-host: #3fa860;
+  --prompt-path: #8ec78e;
+  --prompt-symbol: #4a7a4a;
+  --error: #e06060;
+  --success: #52c478;
+  --link: #8ec78e;
+  --selection: rgba(82, 196, 120, 0.2);
+  --scanlines: 1;
+}
+
+[data-theme="amber"] {
+  --bg-page: #0e0800;
+  --bg-window: #160d01;
+  --bg-titlebar: #1e1202;
+  --border: #3a2010;
+  --text: #c4996a;
+  --text-dim: #7a5530;
+  --accent: #c4903a;
+  --accent-2: #d4aa5a;
+  --prompt-user: #c4903a;
+  --prompt-host: #b07c2a;
+  --prompt-path: #c4aa70;
+  --prompt-symbol: #7a5530;
+  --error: #e06040;
+  --success: #c4b040;
+  --link: #c4aa70;
+  --selection: rgba(196, 144, 58, 0.2);
+  --scanlines: 1;
+}
+
+html, body {
+  background: var(--bg-page);
+  color: var(--text);
+  min-height: 100vh;
+  font-family: var(--font-mono, "JetBrains Mono"), "SF Mono", Menlo, Consolas, monospace;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "calt" 1, "liga" 1;
+}
+
+::selection { background: var(--selection); color: var(--text); }
+
+/* Subtle animated gradient backdrop for "modern" only */
+[data-theme="modern"] body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(900px 600px at 15% 10%, rgba(125, 211, 252, 0.08), transparent 60%),
+    radial-gradient(700px 500px at 85% 90%, rgba(196, 181, 253, 0.07), transparent 60%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* CRT scanlines for green / amber */
+.scanlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0,
+    rgba(0, 0, 0, 0) 2px,
+    rgba(0, 0, 0, 0.18) 3px,
+    rgba(0, 0, 0, 0) 4px
+  );
+  mix-blend-mode: multiply;
+  opacity: calc(var(--scanlines) * 1);
+}
+
+/* Caret */
+.caret {
+  display: inline-block;
+  width: 0.6ch;
+  height: 1.05em;
+  vertical-align: text-bottom;
+  background: var(--accent);
+  margin-left: 1px;
+  animation: blink 1s steps(2, start) infinite;
+}
+
+/* Link styling inside terminal output */
+.term a {
+  color: var(--link);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.term a:hover { color: var(--accent); }
+
+/* Custom scrollbar */
+.term::-webkit-scrollbar { width: 10px; height: 10px; }
+.term::-webkit-scrollbar-track { background: transparent; }
+.term::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 8px;
+}
+.term::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
