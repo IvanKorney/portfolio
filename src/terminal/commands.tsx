@@ -336,13 +336,6 @@ const contactCmd: Command = {
       <Accent>github </Accent>{" "}
       <Link href="https://github.com/IvanKorney">github.com/IvanKorney</Link>
     </div>,
-    <div key="s">
-      {"  "}
-      <Accent>portfolio </Accent>{" "}
-      <Link href="https://ivan-korneychuk.vercel.app">
-        ivan-korneychuk.vercel.app
-      </Link>
-    </div>,
   ],
 };
 

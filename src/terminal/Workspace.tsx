@@ -30,6 +30,14 @@ const STORAGE_SIZE = "ivan-term-window-size";
 const MIN_W = 480;
 const MIN_H = 360;
 
+type ResizeDir = "n" | "s" | "e" | "w" | "ne" | "nw" | "se" | "sw";
+const RESIZE_CURSOR: Record<ResizeDir, string> = {
+  n: "ns-resize",   s: "ns-resize",
+  e: "ew-resize",   w: "ew-resize",
+  ne: "nesw-resize", sw: "nesw-resize",
+  nw: "nwse-resize", se: "nwse-resize",
+};
+
 function clamp(v: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, v));
 }
@@ -161,20 +169,36 @@ export default function Workspace({
     window.addEventListener("mouseup", onUp);
   }, []);
 
-  /* corner resize */
-  const startCornerResize = useCallback((e: React.MouseEvent) => {
+  /* resize from any edge / corner */
+  const startResize = useCallback((dir: ResizeDir) => (e: React.MouseEvent) => {
     e.preventDefault();
+    e.stopPropagation();
     const startMouseX = e.clientX;
     const startMouseY = e.clientY;
     const startW = sizeRef.current.w;
     const startH = sizeRef.current.h;
-    document.body.style.cursor = "nwse-resize";
+    const startPosX = posRef.current.x;
+    const startPosY = posRef.current.y;
+    document.body.style.cursor = RESIZE_CURSOR[dir];
     document.body.style.userSelect = "none";
     const onMove = (ev: MouseEvent) => {
-      setSize({
-        w: clamp(startW + (ev.clientX - startMouseX), MIN_W, window.innerWidth - 16),
-        h: clamp(startH + (ev.clientY - startMouseY), MIN_H, window.innerHeight - 32),
-      });
+      const dx = ev.clientX - startMouseX;
+      const dy = ev.clientY - startMouseY;
+      let newW = startW, newH = startH, newX = startPosX, newY = startPosY;
+      if (dir.includes("e")) newW = clamp(startW + dx, MIN_W, window.innerWidth - startPosX - 16);
+      if (dir.includes("s")) newH = clamp(startH + dy, MIN_H, window.innerHeight - startPosY - 32);
+      if (dir.includes("w")) {
+        const cdx = clamp(dx, -startPosX, startW - MIN_W);
+        newW = startW - cdx;
+        newX = startPosX + cdx;
+      }
+      if (dir.includes("n")) {
+        const cdy = clamp(dy, -startPosY, startH - MIN_H);
+        newH = startH - cdy;
+        newY = startPosY + cdy;
+      }
+      setSize({ w: newW, h: newH });
+      setPos({ x: newX, y: newY });
     };
     const onUp = () => {
       window.removeEventListener("mousemove", onMove);
@@ -339,9 +363,19 @@ export default function Workspace({
           />
         </div>
 
-        {/* corner resize handle */}
+        {/* ── resize handles (edges + corners) ─────────────────── */}
+        {/* edges */}
+        <div onMouseDown={startResize("n")} className="absolute top-0 z-20" style={{ left: 10, right: 10, height: 4, cursor: "ns-resize" }} />
+        <div onMouseDown={startResize("s")} className="absolute bottom-0 z-20" style={{ left: 10, right: 10, height: 4, cursor: "ns-resize" }} />
+        <div onMouseDown={startResize("w")} className="absolute left-0 z-20" style={{ top: 10, bottom: 10, width: 4, cursor: "ew-resize" }} />
+        <div onMouseDown={startResize("e")} className="absolute right-0 z-20" style={{ top: 10, bottom: 10, width: 4, cursor: "ew-resize" }} />
+        {/* corners */}
+        <div onMouseDown={startResize("nw")} className="absolute top-0 left-0 z-20" style={{ width: 10, height: 10, cursor: "nwse-resize" }} />
+        <div onMouseDown={startResize("ne")} className="absolute top-0 right-0 z-20" style={{ width: 10, height: 10, cursor: "nesw-resize" }} />
+        <div onMouseDown={startResize("sw")} className="absolute bottom-0 left-0 z-20" style={{ width: 10, height: 10, cursor: "nesw-resize" }} />
+        {/* bottom-right corner – keep visual grip indicator */}
         <div
-          onMouseDown={startCornerResize}
+          onMouseDown={startResize("se")}
           title="drag to resize window"
           className="absolute bottom-0 right-0 z-20"
           style={{
