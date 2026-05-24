@@ -24,18 +24,15 @@ Source for this site lives on GitHub — type \`github\` to jump there.
 const ABOUT_TXT = `Ivan Korneychuk
 Computer Engineering @ University of Waterloo (cGPA 3.9, expected 2027)
 
-I build software end-to-end. Most recently I've been writing Kotlin
-microservices at Faire, but I'm just as happy in TypeScript on the
-frontend, wiring up Postgres on the backend, or hacking on side
-projects like a real-time 1v1 coding platform.
+Hey, I'm Ivan — I like to code.
 
-What I like:
-  • Untangling monoliths into well-bounded services
-  • Type-safe data layers (DrizzleORM, Zod, Prisma)
-  • Real-time systems and the small puzzles they cause
-  • Tooling that makes the next engineer's life easier
+Tech stack
+  TS · Kotlin · Python · Go · SQL
+  React · Next.js · Node · Spring Boot
+  Postgres · MongoDB · Redis · DrizzleORM · Prisma
 
-I'm based in Waterloo / Montreal and open to chatting — see contact.md.
+Hobbies
+  soccer · cooking · gym
 `;
 
 const CONTACT_MD = `# Contacts

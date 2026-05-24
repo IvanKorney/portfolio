@@ -170,22 +170,21 @@ const aboutCmd: Command = {
         <Dim>· Computer Engineering @ Waterloo · cGPA 3.9 · grad 2027</Dim>
       </div>,
       spacer(),
-      ...pre(
-        `I build software end-to-end. Most recently I've been writing
-Kotlin microservices at Faire, but I'm just as happy in TypeScript
-on the frontend, wiring up Postgres on the backend, or hacking on
-side projects like a real-time 1v1 coding platform.`,
-      ),
+      <div key="i">Hey, I&apos;m Ivan — I like to code.</div>,
       spacer(),
-      <div key="t">
-        <Accent2>what I like</Accent2>
+      <div key="s">
+        <Accent2>tech stack</Accent2>
       </div>,
       ...pre(
-        `  • Untangling monoliths into well-bounded services
-  • Type-safe data layers (DrizzleORM, Zod, Prisma)
-  • Real-time systems and the small puzzles they cause
-  • Tooling that makes the next engineer's life easier`,
+        `  TS · Kotlin · Python · Go · SQL
+  React · Next.js · Node · Spring Boot
+  Postgres · MongoDB · Redis · DrizzleORM · Prisma`,
       ),
+      spacer(),
+      <div key="h">
+        <Accent2>hobbies</Accent2>
+      </div>,
+      ...pre(`  soccer · cooking · gym`),
       spacer(),
       <div key="x">
         <Dim>
