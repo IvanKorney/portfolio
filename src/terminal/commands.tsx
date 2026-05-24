@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { cloneElement } from "react";
+import type { ReactElement, ReactNode } from "react";
 import type { Command, CommandContext, SplitDir, ThemeId } from "./types";
 import { cwdToString, listDir, lookup, resolvePath } from "./filesystem";
 import { THEMES, isThemeId } from "./themes";
@@ -38,6 +39,44 @@ function pre(text: string): ReactNode[] {
 
 function spacer(): ReactNode {
   return <div key={`sp-${Math.random()}`}>&nbsp;</div>;
+}
+
+/**
+ * Render file content with light terminal styling:
+ *   - `#` lines → accent header
+ *   - `•` lines → accent-2 ▸ bullet
+ *   - first non-blank, non-special line → bold  (title)
+ *   - second non-blank, non-special line → dim   (subtitle / tech)
+ *   - everything else → normal text
+ */
+function renderFileLines(content: string): ReactNode[] {
+  const lines = content.replace(/\n$/, "").split("\n");
+  const out: ReactNode[] = [];
+  let titlesUsed = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const raw = lines[i];
+    const trimmed = raw.trim();
+    if (trimmed === "") {
+      out.push(<div key={i}>&nbsp;</div>);
+    } else if (trimmed.startsWith("#")) {
+      out.push(<div key={i}><Accent>{trimmed.replace(/^#+\s*/, "")}</Accent></div>);
+    } else if (trimmed.startsWith("•")) {
+      out.push(
+        <div key={i}>
+          {"  "}<Accent2>▸</Accent2>{" "}{trimmed.slice(1).trim()}
+        </div>,
+      );
+    } else if (titlesUsed === 0) {
+      titlesUsed++;
+      out.push(<div key={i}><Bold>{raw}</Bold></div>);
+    } else if (titlesUsed === 1) {
+      titlesUsed++;
+      out.push(<div key={i}><Dim>{raw}</Dim></div>);
+    } else {
+      out.push(<div key={i}>{raw}</div>);
+    }
+  }
+  return out;
 }
 
 /* ─── individual commands ─────────────────────────────────────── */
@@ -234,8 +273,23 @@ const projectsCmd: Command = {
       ],
       [
         "AI PDF Summarizer",
-        "Multi-page PDF insights via OpenAI; Clerk auth + persistent per-user storage.",
+        "OpenAI-powered PDF Q&A with Clerk auth and per-user document storage.",
         "ai-pdf-summarizer.md",
+      ],
+      [
+        "NoteVault SaaS",
+        "Subscription note-taking app — Stripe billing, Supabase + Prisma, Kinde auth.",
+        "note-vault.md",
+      ],
+      [
+        "Food Ordering Platform",
+        "Full-stack ordering app with Express/MongoDB API, Stripe payments, and React Query.",
+        "food-ordering.md",
+      ],
+      [
+        "Investment Portfolio Tracker",
+        "React + ASP.NET tracker with JWT auth, interface-repository pattern, live stock data.",
+        "investment-portfolio.md",
       ],
     ];
     const out: ReactNode[] = [];
@@ -550,17 +604,9 @@ const catCmd: Command = {
         continue;
       }
       out.push(
-        <pre
-          key={"p" + target}
-          style={{
-            whiteSpace: "pre-wrap",
-            margin: 0,
-            fontFamily: "inherit",
-            color: "var(--text)",
-          }}
-        >
-          {node.content}
-        </pre>,
+        ...renderFileLines(node.content).map((el, j) =>
+          cloneElement(el as ReactElement, { key: "f" + target + j }),
+        ),
       );
     }
     return out;

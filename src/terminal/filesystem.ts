@@ -43,7 +43,6 @@ const CONTACT_MD = `# Contacts
   email      ikorneyc@uwaterloo.ca
   linkedin   https://linkedin.com/in/ivan-korneychuk
   github     https://github.com/IvanKorney
-  portfolio  https://ivan-korneychuk.vercel.app
 
 Quick commands:
   open linkedin     → opens LinkedIn
@@ -160,15 +159,67 @@ A real-time 1v1 competitive coding platform.
 
 const PROJ_AI_PDF = `AI PDF Summarizer
 Next.js · TypeScript · TailwindCSS · DrizzleORM · OpenAI
+Feb 2024 – Mar 2024
 
-• AI-powered summarization tool that extracts insights from
-  multi-page PDFs via the OpenAI API.
+• Utilized the OpenAI API to let users summarize and ask
+  questions about selected PDFs.
 
-• Clerk authentication with persistent per-user document storage
-  for saved summaries across sessions.
+• Implemented Clerk authentication to support multiple accounts
+  and display each user's existing PDFs.
 
-• Type-safe DrizzleORM + PostgreSQL data layer for document
-  metadata and summary persistence.
+• Developed reusable UI components with TailwindCSS and ShadCn,
+  enhancing development efficiency.
+
+• Integrated DrizzleORM to streamline SQL query/mutation
+  development and ensure efficient database interactions.
+`;
+
+const PROJ_NOTE_VAULT = `NoteVault SaaS
+React · TypeScript · Stripe · Supabase · Prisma · Kinde · ShadCn
+Mar 2024 – Apr 2024
+
+• Utilized Supabase and Prisma to query/mutate notes, ensuring
+  seamless data management and scalability.
+
+• Set up a subscription model by integrating Stripe payments and
+  webhooks for real-time billing updates.
+
+• Implemented Kinde authentication to allow different accounts
+  to log in with their own personal settings.
+
+• Integrated ContextAPI state management to efficiently pass
+  data to components, including the overall theme.
+`;
+
+const PROJ_FOOD_ORDERING = `Full Stack Food Ordering Platform
+React · TypeScript · Express.js · MongoDB · Stripe
+Sep 2024 – Oct 2024
+
+• Developed Express.js API endpoints to efficiently manage and
+  interact with MongoDB data for the client.
+
+• Integrated Stripe payment processing and webhooks for
+  real-time order transactions and tracking.
+
+• Implemented backend filtering, pagination, and sorting for
+  data retrieval via React Query.
+
+• Set up Zod schema validation and dynamic routing with
+  react-router-dom.
+`;
+
+const PROJ_INVESTMENT = `Personal Investment Portfolio Tracker
+React · TypeScript · TailwindCSS · C# · ASP.NET
+Oct 2024 – Nov 2024
+
+• Optimized data handling in ASP.NET APIs through an
+  interface-repository model for better scalability.
+
+• Implemented authorization using JWT web tokens created in
+  the C# backend to support multiple clients.
+
+• Connected to a financial modeling API to retrieve live stock
+  data using Axios.
 `;
 
 const f = (content: string): FsFile => ({ type: "file", content });
@@ -192,6 +243,9 @@ export const FS: FsDir = d({
   projects: d({
     "code-clash.md": f(PROJ_CODE_CLASH),
     "ai-pdf-summarizer.md": f(PROJ_AI_PDF),
+    "note-vault.md": f(PROJ_NOTE_VAULT),
+    "food-ordering.md": f(PROJ_FOOD_ORDERING),
+    "investment-portfolio.md": f(PROJ_INVESTMENT),
   }),
 });
 
